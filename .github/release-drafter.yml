@@ -1,8 +1,16 @@
 ---
-name-template: "v$RESOLVED_VERSION"
-tag-template: "v$RESOLVED_VERSION"
-change-template: "- $TITLE @$AUTHOR ([#$NUMBER]($URL))"
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+change-template: '- #$NUMBER $TITLE'
 sort-direction: ascending
+exclude-contributors:
+  - 'github-actions[bot]'
+  - 'github-actions'
+  - 'pre-commit-ci'
+  - 'pre-commit-ci[bot]'
+  - 'crowdin-bot'
+exclude-labels:
+  - 'skip-changelog'
 
 categories:
   - title: "🚨 Breaking changes"
@@ -13,6 +21,7 @@ categories:
       - "new-feature"
   - title: "🐛 Bug fixes"
     labels:
+      - "bug"
       - "bugfix"
   - title: "🚀 Enhancements"
     labels:
@@ -23,6 +32,7 @@ categories:
     labels:
       - "maintenance"
       - "ci"
+      - "ci/cd"
   - title: "📚 Documentation"
     labels:
       - "documentation"
@@ -36,14 +46,15 @@ categories:
 version-resolver:
   major:
     labels:
-      - "major"
+      - 'major'
       - "breaking-change"
   minor:
     labels:
-      - "minor"
+      - 'minor'
       - "new-feature"
   patch:
     labels:
+      - "bug"
       - "bugfix"
       - "chore"
       - "ci"
@@ -52,9 +63,48 @@ version-resolver:
       - "enhancement"
       - "performance"
       - "refactor"
+      - 'patch'
   default: patch
 
+autolabeler:
+  - label: 'ci'
+    files:
+      - '/.github/**/*'
+  - label: 'blueprint'
+    files:
+      - '/custom_components/*/blueprints/**/*'
+  - label: 'documentation'
+    files:
+      - '*.md'
+      - '/custom_components/**/*.md'
+      - '/docs/*'
+      - '/tests/*.md'
+    branch:
+      - '/^(docs?)\/.+/'
+  - label: 'bugfix'
+    branch:
+      - '/fix\/.+/'
+      - '/bug\/.+/'
+      - '/bugfix\/.+/'
+    title:
+      - '/fix/i'
+      - '/^fix:/i'
+      - '/^bug:/i'
+      - '/^bugfix:/i'
+  - label: 'enhancement'
+    branch:
+      - '/feature\/.+/'
+      - '/feat\/.+/'
+    title:
+      - '/^feat:/i'
+    body:
+      - '/JIRA-[0-9]{1,4}/'
+  - label: 'refactor'
+    branch:
+      - '/^refactor\/.+/'
+    title:
+      - '/^refactor:/i'
 template: |
-  ## What’s changed
+  ## What's changed?
 
   $CHANGES
