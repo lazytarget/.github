@@ -49,6 +49,9 @@
 - name: "incomplete"
   color: fef2c0
   description: "Marks a PR or issue that is missing information."
+- name: "wontfix"
+  color: ffffff
+  description: "This will not be worked on."
 
 - name: "beginner-friendly"
   color: 0e8a16
